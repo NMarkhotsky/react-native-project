@@ -1,8 +1,8 @@
-# React Native project
+# <div align=center>React Native project</div>
 ###
 ![MyCollages](https://github.com/NMarkhotsky/react-native-project/assets/111852661/9a4e4e67-5912-47ee-a198-a2e3212e2499)
 ###
-## Завдання 1: Підготовка до роботи
+## <div align=center>Завдання 1: Підготовка до роботи</div>
 1. Встановити `expo`
 2. Встановити `Android Studio`
 3. Встановити `Xcode` (якщо працюєте на Mac)
@@ -13,7 +13,7 @@
 8. Встановити `expo client` собі на телефон
 9. Запустити створений проект на телефоні, емуляторі `Android`, симуляторі `iOS` (якщо працюєте на Mac)
 #
-## Завдання 2: Верстка екранів. Робота зі стилями. Дебаг
+## <div align=center>Завдання 2: Верстка екранів. Робота зі стилями. Дебаг</div>
 1. Створити папку `Screens`
 2. Створити компонент `RegistrationScreen`
 3. Створити компонент `LoginScreen`
@@ -26,13 +26,13 @@
 - [Макет компонента RegistrationScreen](https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?type=design&node-id=3-26)
 - [Макет компонента LoginScreen](https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=12-0&t=tkIKc4K19uOKNunb-0)
 #
-## Завдання 3: Обробка подій. Робота із текстовими інпутами та клавіатурою
+## <div align=center>Завдання 3: Обробка подій. Робота із текстовими інпутами та клавіатурою</div>
 - Додати логіку роботи з формою в компонент `RegistrationScreen`
 - Додати логіку роботи з формою в компонент `LoginScreen`
 - Під час сабміту форм збирати дані з них і виводити в консоль
 - Додати автозакриття клавіатури по кліку за межами форм (Використовуємо `Keyboard.dismiss`)
 #
-## Завдання 4: Навігація
+## <div align=center>Завдання 4: Навігація</div>
 1. Створити екран `CreatePostsScreen`
 2. Створити екран `CommentsScreen`
 3. Створити екран `ProfileScreen`
@@ -57,7 +57,7 @@
 - [Макет компонента ProfileScreen](https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=36-13&t=kFkFeqKaLVknGboO-0)
 - [Інтерактивний приклад навігації в застосунку](https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=36-86&t=YKQMU635gnlpvN39-0)
 #
-## Завдання 5: Нативні компоненти
+## <div align=center>Завдання 5: Нативні компоненти</div>
 1. Підключити камеру в компонент `CreatePostsScreen`;
 2. Під час відкриття екрану `CreatePostsScreen` активується камера і зображення з неї виводиться в блок з іконкою камери
 3. По кліку на іконку камери робиться знімок
@@ -73,7 +73,7 @@
 - [Макет компонента CreatePostsScreen після зробленого фото](https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=36-13&t=5kWIH0XRsJwnJfHy-0)
 - [Макет компонента MapScreen](https://www.figma.com/file/YqWLNarVE4x1zkXa6PYJfi/Homework-(Copy)-(Copy)?node-id=43-54&t=58UisgPOnMIySl1m-0)
 #
-## Завдання 6: Redux і Firebase
+## <div align=center>Завдання 6: Redux і Firebase</div>
 1. Підключити `Redux` до проекту
 2. Підключити `Firebase` до проекту
 3. Додати логіку реєстрації на екрані `RegistrationScreen` через методи `Firebase`
@@ -86,5 +86,5 @@
 10. Додати логіку додавання коментаря під постом, використовуючи `Firebase` та `Redux`
 
 #
-## Завдання 7: Деплой на сервери expo
+## <div align=center>Завдання 7: Деплой на сервери expo</div>
 - Викласти проект на сервери `expo`
