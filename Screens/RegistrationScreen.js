@@ -13,9 +13,11 @@ import {
   Image,
 } from 'react-native';
 import backgroundImage from '../assets/background.png';
+import { AntDesign } from '@expo/vector-icons';
 
 export const RegistrationScreen = () => {
   const [focusedInput, setFocusedInput] = useState(null);
+  const [isHidePassword, setIsHidePassword] = useState(true);
 
   const handleInputFocus = (input) => {
     setFocusedInput(input);
@@ -25,11 +27,16 @@ export const RegistrationScreen = () => {
     setFocusedInput(null);
   };
 
+  const handleHidePassword = () => {
+    setIsHidePassword(!isHidePassword);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         style={styles.container}
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? -165 : -165}
       >
         <ImageBackground
           style={styles.imageBackground}
@@ -39,6 +46,9 @@ export const RegistrationScreen = () => {
           <View style={styles.formContainer}>
             <View style={styles.imagePhotoContainer}>
               <Image style={styles.imagePhoto} />
+              <TouchableOpacity style={styles.loadPhoto}>
+                <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
+              </TouchableOpacity>
             </View>
             <Text style={styles.formTitle}>Реєстрація</Text>
             <View style={styles.inputThumb}>
@@ -64,22 +74,34 @@ export const RegistrationScreen = () => {
                 onBlur={handleInputBlur}
               />
 
-              <TextInput
-                style={[
-                  styles.formInput,
-                  focusedInput === 'password' && styles.focusedFormInput,
-                ]}
-                placeholder="Пароль"
-                textContentType="password"
-                secureTextEntry={true}
-                onFocus={() => handleInputFocus('password')}
-                onBlur={handleInputBlur}
-              />
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={[
+                    styles.formInput,
+                    focusedInput === 'password' && styles.focusedFormInput,
+                  ]}
+                  placeholder="Пароль"
+                  textContentType="password"
+                  secureTextEntry={isHidePassword}
+                  onFocus={() => handleInputFocus('password')}
+                  onBlur={handleInputBlur}
+                />
+                <TouchableOpacity
+                  style={styles.passwordButton}
+                  onPress={handleHidePassword}
+                >
+                  <Text style={styles.passwordButtonText}>
+                    {isHidePassword ? 'Показати' : 'Приховати'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonTitle}>Зареєстуватися</Text>
             </TouchableOpacity>
-            <Text style={styles.textLogin}>Вже є акаунт? Увійти</Text>
+            <TouchableOpacity>
+              <Text style={styles.textLogin}>Вже є акаунт? Увійти</Text>
+            </TouchableOpacity>
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>
@@ -120,6 +142,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
   },
 
+  loadPhoto: {
+    position: 'absolute',
+    right: -12,
+    bottom: 14,
+  },
+
   formTitle: {
     marginBottom: 32,
     fontSize: 30,
@@ -133,7 +161,7 @@ const styles = StyleSheet.create({
   },
 
   formInput: {
-    padding: 15,
+    padding: 16,
     height: 50,
     borderRadius: 8,
     fontSize: 16,
@@ -147,6 +175,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: '#FF6C00',
     backgroundColor: '#FFFFFF',
+  },
+
+  passwordContainer: {
+    position: 'relative',
+  },
+
+  passwordButton: {
+    position: 'absolute',
+    top: 15,
+    right: 12,
+  },
+
+  passwordButtonText: {
+    fontSize: 16,
+    color: '#1B4371',
   },
 
   button: {

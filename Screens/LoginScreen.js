@@ -15,6 +15,7 @@ import backgroundImage from '../assets/background.png';
 
 export const LoginScreen = () => {
   const [focusedInput, setFocusedInput] = useState(null);
+  const [isHidePassword, setIsHidePassword] = useState(true);
 
   const handleInputFocus = (input) => {
     setFocusedInput(input);
@@ -24,11 +25,16 @@ export const LoginScreen = () => {
     setFocusedInput(null);
   };
 
+  const handleHidePassword = () => {
+    setIsHidePassword(!isHidePassword);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         style={styles.container}
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? -230 : -235}
       >
         <ImageBackground
           style={styles.imageBackground}
@@ -50,25 +56,37 @@ export const LoginScreen = () => {
                 onBlur={handleInputBlur}
               />
 
-              <TextInput
-                style={[
-                  styles.formInput,
-                  focusedInput === 'password' && styles.focusedFormInput,
-                ]}
-                placeholder="Пароль"
-                textContentType="password"
-                secureTextEntry={true}
-                onFocus={() => handleInputFocus('password')}
-                onBlur={handleInputBlur}
-              />
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={[
+                    styles.formInput,
+                    focusedInput === 'password' && styles.focusedFormInput,
+                  ]}
+                  placeholder="Пароль"
+                  textContentType="password"
+                  secureTextEntry={isHidePassword}
+                  onFocus={() => handleInputFocus('password')}
+                  onBlur={handleInputBlur}
+                />
+                <TouchableOpacity
+                  style={styles.passwordButton}
+                  onPress={handleHidePassword}
+                >
+                  <Text style={styles.passwordButtonText}>
+                    {isHidePassword ? 'Показати' : 'Приховати'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonTitle}>Увійти</Text>
             </TouchableOpacity>
-            <Text style={styles.textLogin}>
-              Немає акаунту?{' '}
-              <Text style={styles.registrationText}>Зареєструватися</Text>
-            </Text>
+            <TouchableOpacity>
+              <Text style={styles.textLogin}>
+                Немає акаунту?{' '}
+                <Text style={styles.registrationText}>Зареєструватися</Text>
+              </Text>
+            </TouchableOpacity>
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>
@@ -80,11 +98,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+
   imageBackground: {
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'flex-end',
   },
+
   formContainer: {
     paddingTop: 32,
     paddingBottom: 144,
@@ -93,16 +113,19 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 25,
     backgroundColor: '#FFFFFF',
   },
+
   formTitle: {
     marginBottom: 32,
     fontSize: 30,
     lineHeight: 35,
     textAlign: 'center',
   },
+
   inputThumb: {
     marginBottom: 32,
     gap: 16,
   },
+
   formInput: {
     padding: 15,
     height: 50,
@@ -111,6 +134,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     backgroundColor: '#F6F6F6',
   },
+
   focusedFormInput: {
     borderWidth: 1,
     borderStyle: 'solid',
@@ -118,6 +142,22 @@ const styles = StyleSheet.create({
     borderColor: '#FF6C00',
     backgroundColor: '#FFFFFF',
   },
+
+  passwordContainer: {
+    position: 'relative',
+  },
+
+  passwordButton: {
+    position: 'absolute',
+    top: 15,
+    right: 12,
+  },
+
+  passwordButtonText: {
+    fontSize: 16,
+    color: '#1B4371',
+  },
+
   button: {
     paddingVertical: 16,
     paddingHorizontal: 32,
@@ -125,18 +165,21 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: '#FF6C00',
   },
+
   buttonTitle: {
     textAlign: 'center',
     fontSize: 16,
     lineHeight: 19,
     color: '#FFFFFF',
   },
+
   textLogin: {
     textAlign: 'center',
     fontSize: 16,
     lineHeight: 19,
     color: '#1B4371',
   },
+
   registrationText: {
     textDecorationLine: 'underline',
   },
