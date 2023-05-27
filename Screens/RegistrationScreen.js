@@ -10,11 +10,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-  Image,
   useWindowDimensions,
 } from 'react-native';
-import backgroundImage from '../assets/background.png';
-import { AntDesign } from '@expo/vector-icons';
+import backgroundImage from '../assets/images/background.png';
+import * as ImagePicker from 'expo-image-picker';
+import { ImageUser } from '../components/ImageUser/ImageUser';
 
 const initialState = {
   login: '',
@@ -27,6 +27,7 @@ export const RegistrationScreen = () => {
   const [focusedInput, setFocusedInput] = useState(null);
   const [isHidePassword, setIsHidePassword] = useState(true);
   const { height, width } = useWindowDimensions();
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleInputFocus = (input) => {
     setFocusedInput(input);
@@ -45,94 +46,104 @@ export const RegistrationScreen = () => {
     setState(initialState);
   };
 
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    } else {
+      alert('You did not select any image.');
+    }
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? -165 : -165}
-      >
-        <ImageBackground
-          source={backgroundImage}
-          style={{ position: 'absolute', width: width, height: height }}
-        />
-        <View style={styles.formContainer}>
-          <View style={styles.imagePhotoContainer}>
-            <Image style={styles.imagePhoto} />
-            <TouchableOpacity style={styles.loadPhoto}>
-              <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.formTitle}>Реєстрація</Text>
-          <View style={styles.inputThumb}>
-            <TextInput
-              style={[
-                styles.formInput,
-                focusedInput === 'login' && styles.focusedFormInput,
-              ]}
-              placeholder="Логін"
-              autoFocus={true}
-              value={state.login}
-              onChangeText={(value) =>
-                setState((prev) => ({ ...prev, login: value }))
-              }
-              onFocus={() => handleInputFocus('login')}
-              onBlur={handleInputBlur}
+    <ImageBackground
+      source={backgroundImage}
+      style={{ position: 'absolute', width: width, height: height }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? -165 : -165}
+        >
+          <View style={styles.formContainer}>
+            <ImageUser
+              selectedImage={selectedImage}
+              onPress={pickImageAsync}
+              onDelete={setSelectedImage}
             />
-
-            <TextInput
-              style={[
-                styles.formInput,
-                focusedInput === 'email' && styles.focusedFormInput,
-              ]}
-              placeholder="Адреса електронної пошти"
-              textContentType="emailAddress"
-              keyboardType="email-address"
-              autoFocus={true}
-              value={state.email}
-              onChangeText={(value) =>
-                setState((prev) => ({ ...prev, email: value }))
-              }
-              onFocus={() => handleInputFocus('email')}
-              onBlur={handleInputBlur}
-            />
-
-            <View style={styles.passwordContainer}>
+            <Text style={styles.formTitle}>Реєстрація</Text>
+            <View style={styles.inputThumb}>
               <TextInput
                 style={[
                   styles.formInput,
-                  focusedInput === 'password' && styles.focusedFormInput,
+                  focusedInput === 'login' && styles.focusedFormInput,
                 ]}
-                placeholder="Пароль"
-                textContentType="password"
-                secureTextEntry={isHidePassword}
-                autoFocus={true}
-                value={state.password}
+                placeholder="Логін"
+                value={state.login}
                 onChangeText={(value) =>
-                  setState((prev) => ({ ...prev, password: value }))
+                  setState((prev) => ({ ...prev, login: value }))
                 }
-                onFocus={() => handleInputFocus('password')}
+                onFocus={() => handleInputFocus('login')}
                 onBlur={handleInputBlur}
               />
-              <TouchableOpacity
-                style={styles.passwordButton}
-                onPress={handleHidePassword}
-              >
-                <Text style={styles.passwordButtonText}>
-                  {isHidePassword ? 'Показати' : 'Приховати'}
-                </Text>
-              </TouchableOpacity>
+
+              <TextInput
+                style={[
+                  styles.formInput,
+                  focusedInput === 'email' && styles.focusedFormInput,
+                ]}
+                placeholder="Адреса електронної пошти"
+                textContentType="emailAddress"
+                keyboardType="email-address"
+                value={state.email}
+                onChangeText={(value) =>
+                  setState((prev) => ({ ...prev, email: value }))
+                }
+                onFocus={() => handleInputFocus('email')}
+                onBlur={handleInputBlur}
+              />
+
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={[
+                    styles.formInput,
+                    focusedInput === 'password' && styles.focusedFormInput,
+                  ]}
+                  placeholder="Пароль"
+                  textContentType="password"
+                  secureTextEntry={isHidePassword}
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prev) => ({ ...prev, password: value }))
+                  }
+                  onFocus={() => handleInputFocus('password')}
+                  onBlur={handleInputBlur}
+                />
+                <TouchableOpacity
+                  style={styles.passwordButton}
+                  onPress={handleHidePassword}
+                >
+                  <Text style={styles.passwordButtonText}>
+                    {isHidePassword ? 'Показати' : 'Приховати'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonTitle}>Зареєстуватися</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={styles.textLogin}>Вже є акаунт? Увійти</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text style={styles.buttonTitle}>Зареєстуватися</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.textLogin}>Вже є акаунт? Увійти</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    </ImageBackground>
   );
 };
 
@@ -149,25 +160,6 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 25,
     borderTopEndRadius: 25,
     backgroundColor: '#FFFFFF',
-  },
-
-  imagePhotoContainer: {
-    position: 'absolute',
-    left: '50%',
-    transform: [{ translateX: -45 }],
-    top: -60,
-  },
-  imagePhoto: {
-    width: 120,
-    height: 120,
-    borderRadius: 16,
-    backgroundColor: '#F6F6F6',
-  },
-
-  loadPhoto: {
-    position: 'absolute',
-    right: -12,
-    bottom: 14,
   },
 
   formTitle: {
