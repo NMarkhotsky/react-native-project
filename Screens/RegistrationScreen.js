@@ -12,6 +12,7 @@ import {
   Keyboard,
   useWindowDimensions,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import backgroundImage from '../assets/images/background.png';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageUser } from '../components/ImageUser/ImageUser';
@@ -28,6 +29,8 @@ export const RegistrationScreen = () => {
   const [isHidePassword, setIsHidePassword] = useState(true);
   const { height, width } = useWindowDimensions();
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const navigation = useNavigation();
 
   const handleInputFocus = (input) => {
     setFocusedInput(input);
@@ -137,7 +140,9 @@ export const RegistrationScreen = () => {
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonTitle}>Зареєстуватися</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('LoginScreen')}
+            >
               <Text style={styles.textLogin}>Вже є акаунт? Увійти</Text>
             </TouchableOpacity>
           </View>
