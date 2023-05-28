@@ -13,7 +13,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import backgroundImage from '../assets/images/background.png';
+import backgroundImage from '../../assets/images/background.png';
 
 const initialState = {
   email: '',

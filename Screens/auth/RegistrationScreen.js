@@ -13,7 +13,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import backgroundImage from '../assets/images/background.png';
+import backgroundImage from '../../assets/images/background.png';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageUser } from '../../components/ImageUser/ImageUser';
 

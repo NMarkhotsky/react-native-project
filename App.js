@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { RegistrationScreen } from './Screens/auth/RegistrationScreen';
 import { LoginScreen } from './Screens/auth/LoginScreen';
+import { Home } from './Screens/Home/Home';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -23,16 +24,21 @@ export default function App() {
       <StatusBar style="auto" />
       <NavigationContainer>
         <MainStack.Navigator initialRouteName="LoginScreen">
-          <MainStack.Screen
+          {/* <MainStack.Screen
             name="RegistrationScreen"
             component={RegistrationScreen}
             options={{ headerShown: false }}
-          ></MainStack.Screen>
+          />
           <MainStack.Screen
             name="LoginScreen"
             component={LoginScreen}
             options={{ headerShown: false }}
-          ></MainStack.Screen>
+          /> */}
+          <MainStack.Screen
+            name="HomeScreen"
+            component={Home}
+            options={{ headerShown: false }}
+          />
         </MainStack.Navigator>
       </NavigationContainer>
     </>
