@@ -20,7 +20,7 @@ const initialState = {
   password: '',
 };
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ setIsLogin }) => {
   const [state, setState] = useState(initialState);
   const [focusedInput, setFocusedInput] = useState(null);
   const [isHidePassword, setIsHidePassword] = useState(true);
@@ -43,6 +43,7 @@ export const LoginScreen = () => {
   const handleSubmit = () => {
     console.log(state);
     setState(initialState);
+    setIsLogin(true);
   };
 
   return (

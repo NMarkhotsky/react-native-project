@@ -23,7 +23,7 @@ const initialState = {
   password: '',
 };
 
-export const RegistrationScreen = () => {
+export const RegistrationScreen = ({ setIsLogin }) => {
   const [state, setState] = useState(initialState);
   const [focusedInput, setFocusedInput] = useState(null);
   const [isHidePassword, setIsHidePassword] = useState(true);
@@ -47,6 +47,7 @@ export const RegistrationScreen = () => {
   const handleSubmit = () => {
     console.log(state);
     setState(initialState);
+    setIsLogin(true);
   };
 
   const pickImageAsync = async () => {
