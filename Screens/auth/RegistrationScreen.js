@@ -12,23 +12,29 @@ import {
   Keyboard,
   useWindowDimensions,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import backgroundImage from '../../assets/images/background.png';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageUser } from '../../components/ImageUser/ImageUser';
 
+import { authSignUpUser } from '../../redux/auth/authOperations';
+
 const initialState = {
-  login: '',
-  email: '',
-  password: '',
+  photoURL: null,
+  login: null,
+  email: null,
+  password: null,
 };
 
-export const RegistrationScreen = ({ setIsLogin }) => {
+export const RegistrationScreen = ({}) => {
   const [state, setState] = useState(initialState);
   const [focusedInput, setFocusedInput] = useState(null);
   const [isHidePassword, setIsHidePassword] = useState(true);
   const { height, width } = useWindowDimensions();
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
+
+  const dispatch = useDispatch();
 
   const navigation = useNavigation();
 
@@ -45,9 +51,13 @@ export const RegistrationScreen = ({ setIsLogin }) => {
   };
 
   const handleSubmit = () => {
-    console.log(state);
-    setState(initialState);
-    setIsLogin(true);
+    const { login, email, password } = state;
+
+    if (login && email && password) {
+      console.log('register ', state);
+      dispatch(authSignUpUser(state));
+      setState(initialState);
+    }
   };
 
   const pickImageAsync = async () => {
@@ -57,7 +67,7 @@ export const RegistrationScreen = ({ setIsLogin }) => {
     });
 
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
+      setState((prev) => ({ ...prev, photoURL: result.assets[0].uri }));
     } else {
       alert('You did not select any image.');
     }
@@ -76,9 +86,10 @@ export const RegistrationScreen = ({ setIsLogin }) => {
         >
           <View style={styles.formContainer}>
             <ImageUser
-              selectedImage={selectedImage}
+              // selectedImage={selectedImage}
+              state={state}
               onPress={pickImageAsync}
-              onDelete={setSelectedImage}
+              onDelete={setState}
             />
             <Text style={styles.formTitle}>Реєстрація</Text>
             <View style={styles.inputThumb}>

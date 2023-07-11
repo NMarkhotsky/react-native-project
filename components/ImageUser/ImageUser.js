@@ -1,8 +1,8 @@
 import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-export const ImageUser = ({ selectedImage, onPress, onDelete }) => {
-  const imageSource = selectedImage !== null ? { uri: selectedImage } : null;
+export const ImageUser = ({ state: { photoURL }, onPress, onDelete }) => {
+  const imageSource = photoURL !== null ? { uri: photoURL } : null;
 
   return (
     <View style={styles.imagePhotoContainer}>
@@ -14,7 +14,7 @@ export const ImageUser = ({ selectedImage, onPress, onDelete }) => {
       ) : (
         <TouchableOpacity
           style={styles.loadPhoto}
-          onPress={() => onDelete(null)}
+          onPress={() => onDelete((prev) => ({ ...prev, photoURL: null }))}
         >
           <AntDesign name="closecircleo" size={25} color="#BDBDBD" />
         </TouchableOpacity>

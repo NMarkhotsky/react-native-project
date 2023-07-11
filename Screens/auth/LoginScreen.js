@@ -13,18 +13,22 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import backgroundImage from '../../assets/images/background.png';
+import { authSignInUser } from '../../redux/auth/authOperations';
 
 const initialState = {
-  email: '',
-  password: '',
+  email: null,
+  password: null,
 };
 
-export const LoginScreen = ({ setIsLogin }) => {
+export const LoginScreen = ({}) => {
   const [state, setState] = useState(initialState);
   const [focusedInput, setFocusedInput] = useState(null);
   const [isHidePassword, setIsHidePassword] = useState(true);
   const { height, width } = useWindowDimensions();
+
+  const dispatch = useDispatch();
 
   const navigation = useNavigation();
 
@@ -41,9 +45,13 @@ export const LoginScreen = ({ setIsLogin }) => {
   };
 
   const handleSubmit = () => {
-    console.log(state);
-    setState(initialState);
-    setIsLogin(true);
+    const { email, password } = state;
+
+    if (email && password) {
+      console.log('register ', state);
+      dispatch(authSignInUser(state));
+      setState(initialState);
+    }
   };
 
   return (

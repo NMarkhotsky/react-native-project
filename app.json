@@ -2,6 +2,7 @@
   "expo": {
     "name": "react-native-project",
     "slug": "react-native-project",
+    "jsEngine": "hermes",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,14 +13,19 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
+    "packagerOpts": {
+      "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"]
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "jsEngine": "jsc"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "jsEngine": "jsc"
     },
     "web": {
       "favicon": "./assets/favicon.png"

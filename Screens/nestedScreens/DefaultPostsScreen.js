@@ -8,9 +8,15 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useAuth } from '../../hooks/useAuth';
 
 export const DefaultPostsScreen = ({ route: { params }, navigation }) => {
   const [post, setPost] = useState([]);
+
+  const {
+    authState: { photoURL, login, email },
+  } = useAuth();
+  console.log('photoURL: ', photoURL);
 
   useEffect(() => {
     if (params) setPost((prevState) => [...prevState, params]);
@@ -18,6 +24,13 @@ export const DefaultPostsScreen = ({ route: { params }, navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.profileContainer}>
+        <Image style={styles.profileImages} source={{ uri: photoURL }} />
+        <View style={styles.profileInfo}>
+          <Text style={styles.profileName}>{login}</Text>
+          <Text style={styles.profileEmail}>{email}</Text>
+        </View>
+      </View>
       <FlatList
         data={post}
         keyExtractor={(_, index) => index.toString()}
@@ -74,12 +87,34 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#ffffff',
   },
-  subContainer: {
+  profileContainer: {
     marginTop: 32,
-    marginBottom: 34,
+    marginBottom: 32,
     paddingHorizontal: 16,
+    flexDirection: 'row',
+  },
+  subContainer: {
+    paddingHorizontal: 16,
+    marginBottom: 32,
   },
   imageContainer: {},
+  profileImages: {
+    width: 60,
+    height: 60,
+    borderRadius: 16,
+  },
+  profileInfo: {
+    marginLeft: 8,
+    justifyContent: 'center',
+  },
+  profileName: {
+    fontFamily: 'Roboto-Medium',
+    fontSize: 13,
+  },
+  profileEmail: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 11,
+  },
   image: {
     height: 240,
     borderRadius: 8,

@@ -12,6 +12,14 @@ import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
+import {
+  uploadPhotoToServer,
+  writeDataToFirestore,
+} from '../../redux/post/postOperations';
+// import { collection, addDoc } from 'firebase/firestore';
+// import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+// import { db, storage } from '../../firebase/config';
+// import { nanoid } from 'nanoid';
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -70,9 +78,32 @@ export const CreatePostsScreen = ({ navigation }) => {
       setConvertedCoordinate({ region, country });
     }
   };
+  const openGallery = async () => {
+    const galleryResult = await ImagePicker.launchImageLibraryAsync();
+
+    if (!galleryResult.canceled && galleryResult.assets.length > 0) {
+      setCapturedPhoto(galleryResult.assets[0].uri);
+
+      const { coords } = await Location.getCurrentPositionAsync();
+      setLocation(coords);
+
+      const address = await Location.reverseGeocodeAsync({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      });
+
+      const { region, country } = address[0];
+
+      setConvertedCoordinate({ region, country });
+    }
+  };
 
   const publishPhoto = async () => {
     if (location) {
+      const photo = await uploadPhotoToServer(capturedPhoto);
+
+      writeDataToFirestore(photo, namePost, location, convertedCoordinate);
+
       navigation.navigate('DefaultPostsScreen', {
         capturedPhoto,
         namePost,
@@ -106,9 +137,11 @@ export const CreatePostsScreen = ({ navigation }) => {
           )}
         </View>
 
-        <Text style={styles.cameraText}>
-          {capturedPhoto ? 'Редагувати фото' : 'Завантажте фото'}
-        </Text>
+        <TouchableOpacity onPress={openGallery}>
+          <Text style={styles.cameraText}>
+            {capturedPhoto ? 'Редагувати фото' : 'Завантажте фото'}
+          </Text>
+        </TouchableOpacity>
 
         <View style={styles.inputContainer}>
           <TextInput

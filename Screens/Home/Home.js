@@ -6,7 +6,7 @@ import { Feather } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
-export const Home = ({ navigation, setIsLogin }) => {
+export const Home = ({ navigation }) => {
   const [tabBarStyle, setTabBarStyle] = useState('flex');
 
   return (
@@ -51,7 +51,6 @@ export const Home = ({ navigation, setIsLogin }) => {
         {({ navigation }) => (
           <PostsScreen
             navigation={navigation}
-            setIsLogin={setIsLogin}
             setTabBarStyle={setTabBarStyle}
           />
         )}

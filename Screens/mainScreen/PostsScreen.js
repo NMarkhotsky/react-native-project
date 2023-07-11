@@ -1,16 +1,24 @@
 import { Text, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
   DefaultPostsScreen,
   CommentsScreen,
   MapScreen,
 } from '../nestedScreens';
+import { authSignOutUser } from '../../redux/auth/authOperations';
 
 import { Feather } from '@expo/vector-icons';
 
 const NestedScreen = createStackNavigator();
 
-export const PostsScreen = ({ navigation, setIsLogin, setTabBarStyle }) => {
+export const PostsScreen = ({ navigation, setTabBarStyle }) => {
+  const dispatch = useDispatch();
+
+  const signOut = () => {
+    dispatch(authSignOutUser());
+  };
+
   return (
     <NestedScreen.Navigator
       screenOptions={{
@@ -40,7 +48,7 @@ export const PostsScreen = ({ navigation, setIsLogin, setTabBarStyle }) => {
           headerRight: () => (
             <TouchableOpacity
               style={{ marginRight: 16, marginBottom: 10 }}
-              onPress={() => setIsLogin(false)}
+              onPress={signOut}
             >
               <Feather name="log-out" size={24} color="#BDBDBD" />
             </TouchableOpacity>
