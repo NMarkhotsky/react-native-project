@@ -18,7 +18,10 @@ import backgroundImage from '../../assets/images/background.png';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageUser } from '../../components/ImageUser/ImageUser';
 
-import { authSignUpUser } from '../../redux/auth/authOperations';
+import {
+  authSignUpUser,
+  uploadAvatarToServer,
+} from '../../redux/auth/authOperations';
 
 const initialState = {
   photoURL: null,
@@ -32,7 +35,6 @@ export const RegistrationScreen = ({}) => {
   const [focusedInput, setFocusedInput] = useState(null);
   const [isHidePassword, setIsHidePassword] = useState(true);
   const { height, width } = useWindowDimensions();
-  // const [selectedImage, setSelectedImage] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -67,7 +69,10 @@ export const RegistrationScreen = ({}) => {
     });
 
     if (!result.canceled) {
-      setState((prev) => ({ ...prev, photoURL: result.assets[0].uri }));
+      const photoURL = await uploadAvatarToServer(result.assets[0].uri);
+      console.log('photoURL: ', photoURL);
+
+      setState((prev) => ({ ...prev, photoURL }));
     } else {
       alert('You did not select any image.');
     }
@@ -86,7 +91,6 @@ export const RegistrationScreen = ({}) => {
         >
           <View style={styles.formContainer}>
             <ImageUser
-              // selectedImage={selectedImage}
               state={state}
               onPress={pickImageAsync}
               onDelete={setState}

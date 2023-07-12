@@ -16,10 +16,7 @@ import {
   uploadPhotoToServer,
   writeDataToFirestore,
 } from '../../redux/post/postOperations';
-// import { collection, addDoc } from 'firebase/firestore';
-// import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-// import { db, storage } from '../../firebase/config';
-// import { nanoid } from 'nanoid';
+import { useAuth } from '../../hooks/useAuth';
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -28,6 +25,10 @@ export const CreatePostsScreen = ({ navigation }) => {
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const [namePost, setNamePost] = useState('');
   const [isDisabledPublishBtn, setIsDisabledPublishBtn] = useState(false);
+
+  const {
+    authState: { userId },
+  } = useAuth();
 
   useEffect(() => {
     (async () => {
@@ -102,14 +103,15 @@ export const CreatePostsScreen = ({ navigation }) => {
     if (location) {
       const photo = await uploadPhotoToServer(capturedPhoto);
 
-      writeDataToFirestore(photo, namePost, location, convertedCoordinate);
-
-      navigation.navigate('DefaultPostsScreen', {
-        capturedPhoto,
+      await writeDataToFirestore({
+        photo,
         namePost,
         location,
         convertedCoordinate,
+        userId,
       });
+
+      navigation.navigate('DefaultPostsScreen');
 
       setCapturedPhoto(null);
       setNamePost('');

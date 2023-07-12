@@ -1,7 +1,13 @@
-import { collection, addDoc, getDocs, updateDoc } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  onSnapshot,
+  doc,
+} from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../firebase/config';
-import { publishPost } from './postSlice';
 
 export const uploadPhotoToServer = async (capturedPhoto) => {
   try {
@@ -23,32 +29,21 @@ export const uploadPhotoToServer = async (capturedPhoto) => {
   }
 };
 
-export const writeDataToFirestore = async (
-  photo,
-  namePost,
-  location,
-  convertedCoordinate
-) => {
+export const writeDataToFirestore = async (data) => {
   try {
-    const dataRef = await addDoc(collection(db, 'posts'), {
-      photo,
-      namePost,
-      location,
-      convertedCoordinate,
-    });
-    console.log('Document written with ID: ', dataRef.id);
+    const dataRef = await addDoc(collection(db, 'posts'), { ...data });
+
+    return dataRef;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getDataFromFirestore = async () => {
-  try {
-    const data = await getDocs(collection(db, 'posts'));
+export const getDataFromFirestore = (callback) => {
+  const unsubscribe = onSnapshot(collection(db, 'posts'), (snapshot) => {
+    const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    callback(data);
+  });
 
-    data.forEach((data) => console.log(data.data()));
-  } catch (error) {
-    console.log(error);
-  }
+  return unsubscribe;
 };
-getDataFromFirestore();

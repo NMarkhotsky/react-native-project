@@ -5,8 +5,9 @@ import {
   updateProfile,
   signOut,
 } from 'firebase/auth';
-import { auth } from '../../firebase/config';
+import { auth, storage } from '../../firebase/config';
 import { updateUserProfile, authStateChange, authSignOut } from './authSlice';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 export const authSignUpUser =
   ({ login, email, password, photoURL }) =>
@@ -66,5 +67,25 @@ export const authStateChangeUser = () => async (dispatch, getState) => {
     });
   } catch (error) {
     console.log('error: ', error, error.message);
+  }
+};
+
+export const uploadAvatarToServer = async (photoURL) => {
+  try {
+    const response = await fetch(photoURL);
+    const file = await response.blob();
+    const uniqueImageId = Date.now().toString();
+
+    const dataRef = await ref(storage, `avatar/${uniqueImageId}`);
+
+    await uploadBytesResumable(dataRef, file);
+
+    const avatarPhoto = await getDownloadURL(
+      ref(storage, `avatar/${uniqueImageId}`)
+    );
+
+    return avatarPhoto;
+  } catch (error) {
+    console.log(error);
   }
 };

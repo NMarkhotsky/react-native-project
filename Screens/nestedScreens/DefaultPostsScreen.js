@@ -9,18 +9,22 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useAuth } from '../../hooks/useAuth';
+import { getDataFromFirestore } from '../../redux/post/postOperations';
 
-export const DefaultPostsScreen = ({ route: { params }, navigation }) => {
+export const DefaultPostsScreen = ({ route, navigation }) => {
   const [post, setPost] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = getDataFromFirestore((newData) => {
+      setPost(newData);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const {
     authState: { photoURL, login, email },
   } = useAuth();
-  console.log('photoURL: ', photoURL);
-
-  useEffect(() => {
-    if (params) setPost((prevState) => [...prevState, params]);
-  }, [params]);
 
   return (
     <View style={styles.container}>
@@ -36,7 +40,7 @@ export const DefaultPostsScreen = ({ route: { params }, navigation }) => {
         keyExtractor={(_, index) => index.toString()}
         renderItem={({
           item: {
-            capturedPhoto,
+            photo,
             namePost,
             location,
             convertedCoordinate: { region, country },
@@ -45,7 +49,7 @@ export const DefaultPostsScreen = ({ route: { params }, navigation }) => {
           return (
             <View style={styles.subContainer}>
               <View style={styles.imageContainer}>
-                <Image source={{ uri: capturedPhoto }} style={styles.image} />
+                <Image source={{ uri: photo }} style={styles.image} />
               </View>
               <Text style={[{ ...styles.text, ...styles.namePost }]}>
                 {namePost}

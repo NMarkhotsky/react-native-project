@@ -4,7 +4,10 @@ export const postSlice = createSlice({
   name: 'posts',
   initialState: [],
   reducers: {
-    publishPost: (state, { payload }) => payload,
+    publishPost: (state, { payload }) => ({
+      ...state,
+      payload,
+    }),
   },
 });
 
