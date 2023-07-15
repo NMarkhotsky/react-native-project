@@ -48,7 +48,6 @@ export const LoginScreen = ({}) => {
     const { email, password } = state;
 
     if (email && password) {
-      console.log('register ', state);
       dispatch(authSignInUser(state));
       setState(initialState);
     }

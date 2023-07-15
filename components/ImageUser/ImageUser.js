@@ -1,8 +1,21 @@
 import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
+import { removeUserAvatar } from '../../redux/auth/authOperations';
+import { useAuth } from '../../hooks/useAuth';
 
-export const ImageUser = ({ state: { photoURL }, onPress, onDelete }) => {
-  const imageSource = photoURL !== null ? { uri: photoURL } : null;
+export const ImageUser = ({ state, onPress, onDelete }) => {
+  const dispatch = useDispatch();
+
+  const {
+    authState: { photoURL },
+  } = useAuth();
+
+  const handleRemoveAvatar = () => {
+    dispatch(removeUserAvatar(null));
+  };
+
+  const imageSource = state.photoURL !== null ? { uri: state.photoURL } : null;
 
   return (
     <View style={styles.imagePhotoContainer}>
@@ -14,7 +27,11 @@ export const ImageUser = ({ state: { photoURL }, onPress, onDelete }) => {
       ) : (
         <TouchableOpacity
           style={styles.loadPhoto}
-          onPress={() => onDelete((prev) => ({ ...prev, photoURL: null }))}
+          onPress={
+            photoURL
+              ? handleRemoveAvatar
+              : () => onDelete((prev) => ({ ...prev, photoURL: null }))
+          }
         >
           <AntDesign name="closecircleo" size={25} color="#BDBDBD" />
         </TouchableOpacity>

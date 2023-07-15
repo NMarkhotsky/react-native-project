@@ -4,7 +4,7 @@ import MapView, { Marker } from 'react-native-maps';
 
 export const MapScreen = ({ route: { params }, setTabBarStyle }) => {
   const {
-    capturedPhoto,
+    photo,
     namePost,
     location: { latitude, longitude },
   } = params;
@@ -30,7 +30,7 @@ export const MapScreen = ({ route: { params }, setTabBarStyle }) => {
       >
         <Marker title={namePost} coordinate={{ latitude, longitude }}>
           <Image
-            source={{ uri: capturedPhoto }}
+            source={{ uri: photo }}
             style={{ width: 50, height: 50, borderRadius: 8 }}
           />
         </Marker>

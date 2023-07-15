@@ -6,6 +6,8 @@ import {
   TextInput,
   Image,
   StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
@@ -121,95 +123,99 @@ export const CreatePostsScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View>
-        <View style={styles.cameraContainer}>
-          <View style={styles.cameraIconContainer}>
-            <TouchableOpacity style={styles.cameraIcon} onPress={openCamera}>
-              <MaterialIcons name="camera-alt" size={24} color="#BDBDBD" />
-            </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View>
+          <View style={styles.cameraContainer}>
+            <View style={styles.cameraIconContainer}>
+              <TouchableOpacity style={styles.cameraIcon} onPress={openCamera}>
+                <MaterialIcons name="camera-alt" size={24} color="#BDBDBD" />
+              </TouchableOpacity>
+            </View>
+            {capturedPhoto ? (
+              <Image
+                style={styles.previewImage}
+                source={{ uri: capturedPhoto }}
+              />
+            ) : (
+              <Camera style={styles.camera} />
+            )}
           </View>
-          {capturedPhoto ? (
-            <Image
-              style={styles.previewImage}
-              source={{ uri: capturedPhoto }}
+
+          <TouchableOpacity onPress={openGallery}>
+            <Text style={styles.cameraText}>
+              {capturedPhoto ? 'Редагувати фото' : 'Завантажте фото'}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Назва..."
+              placeholderTextColor="#BDBDBD"
+              value={namePost.trimStart()}
+              onChangeText={setNamePost}
             />
-          ) : (
-            <Camera style={styles.camera} />
-          )}
-        </View>
-
-        <TouchableOpacity onPress={openGallery}>
-          <Text style={styles.cameraText}>
-            {capturedPhoto ? 'Редагувати фото' : 'Завантажте фото'}
-          </Text>
-        </TouchableOpacity>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Назва..."
-            placeholderTextColor="#BDBDBD"
-            value={namePost.trimStart()}
-            onChangeText={setNamePost}
-          />
-          <TextInput
-            style={{ ...styles.input, marginTop: 16 }}
-            placeholder="Місцевість..."
-            placeholderTextColor="#BDBDBD"
-            value={
-              convertedCoordinate
-                ? `${convertedCoordinate.region}, ${convertedCoordinate.country}`
-                : null
-            }
-          />
-          <TouchableOpacity
-            style={
-              isDisabledPublishBtn
-                ? {
-                    ...styles.button,
-                    backgroundColor: '#F6F6F6',
-                    color: '#BDBDBD',
-                  }
-                : { ...styles.button, backgroundColor: '#FF6C00' }
-            }
-            disabled={isDisabledPublishBtn}
-            onPress={publishPhoto}
-          >
-            <Text
+            <TextInput
+              style={{ ...styles.input, marginTop: 16 }}
+              placeholder="Місцевість..."
+              placeholderTextColor="#BDBDBD"
+              value={
+                convertedCoordinate
+                  ? `${convertedCoordinate.region}, ${convertedCoordinate.country}`
+                  : null
+              }
+            />
+            <TouchableOpacity
               style={
                 isDisabledPublishBtn
                   ? {
-                      ...styles.buttonTitle,
+                      ...styles.button,
+                      backgroundColor: '#F6F6F6',
                       color: '#BDBDBD',
                     }
-                  : { ...styles.buttonTitle, color: '#FFFFFF' }
+                  : { ...styles.button, backgroundColor: '#FF6C00' }
               }
+              disabled={isDisabledPublishBtn}
+              onPress={publishPhoto}
             >
-              {location || !capturedPhoto ? 'Опублікувати' : 'Завантаження...'}
-            </Text>
+              <Text
+                style={
+                  isDisabledPublishBtn
+                    ? {
+                        ...styles.buttonTitle,
+                        color: '#BDBDBD',
+                      }
+                    : { ...styles.buttonTitle, color: '#FFFFFF' }
+                }
+              >
+                {location || !capturedPhoto
+                  ? 'Опублікувати'
+                  : 'Завантаження...'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View
+          style={{
+            alignItems: 'center',
+            marginBottom: 34,
+          }}
+        >
+          <TouchableOpacity
+            style={styles.buttonDelete}
+            onPress={() => {
+              setCapturedPhoto(null);
+              setNamePost('');
+              setConvertedCoordinate(null);
+              console.log('Delete');
+            }}
+          >
+            <Feather name="trash-2" size={24} color="#BDBDBD" />
           </TouchableOpacity>
         </View>
       </View>
-      <View
-        style={{
-          alignItems: 'center',
-          marginBottom: 34,
-        }}
-      >
-        <TouchableOpacity
-          style={styles.buttonDelete}
-          onPress={() => {
-            setCapturedPhoto(null);
-            setNamePost('');
-            setConvertedCoordinate(null);
-            console.log('Delete');
-          }}
-        >
-          <Feather name="trash-2" size={24} color="#BDBDBD" />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -56,7 +56,6 @@ export const RegistrationScreen = ({}) => {
     const { login, email, password } = state;
 
     if (login && email && password) {
-      console.log('register ', state);
       dispatch(authSignUpUser(state));
       setState(initialState);
     }
@@ -70,7 +69,6 @@ export const RegistrationScreen = ({}) => {
 
     if (!result.canceled) {
       const photoURL = await uploadAvatarToServer(result.assets[0].uri);
-      console.log('photoURL: ', photoURL);
 
       setState((prev) => ({ ...prev, photoURL }));
     } else {

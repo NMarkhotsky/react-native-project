@@ -16,6 +16,7 @@ export const authSignUpUser =
       await createUserWithEmailAndPassword(auth, email, password);
 
       const user = await auth.currentUser;
+      console.log('user: ', user);
 
       await updateProfile(user, { displayName: login, photoURL });
 
@@ -87,5 +88,24 @@ export const uploadAvatarToServer = async (photoURL) => {
     return avatarPhoto;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const removeUserAvatar = (photoURL) => async (dispatch, getState) => {
+  try {
+    const user = await auth.currentUser;
+
+    await updateProfile(user, { photoURL });
+
+    await dispatch(
+      updateUserProfile({
+        userId: user.uid,
+        login: user.displayName,
+        photoURL,
+      })
+    );
+    console.log('user: ', user);
+  } catch (error) {
+    console.log('error: ', error, error.message);
   }
 };

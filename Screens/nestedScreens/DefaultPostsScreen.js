@@ -14,6 +14,8 @@ import { getDataFromFirestore } from '../../redux/post/postOperations';
 export const DefaultPostsScreen = ({ route, navigation }) => {
   const [post, setPost] = useState([]);
 
+  const { authState } = useAuth();
+
   useEffect(() => {
     const unsubscribe = getDataFromFirestore((newData) => {
       setPost(newData);
@@ -22,17 +24,16 @@ export const DefaultPostsScreen = ({ route, navigation }) => {
     return () => unsubscribe();
   }, []);
 
-  const {
-    authState: { photoURL, login, email },
-  } = useAuth();
-
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
-        <Image style={styles.profileImages} source={{ uri: photoURL }} />
+        <Image
+          style={styles.profileImages}
+          source={{ uri: authState.photoURL }}
+        />
         <View style={styles.profileInfo}>
-          <Text style={styles.profileName}>{login}</Text>
-          <Text style={styles.profileEmail}>{email}</Text>
+          <Text style={styles.profileName}>{authState.login}</Text>
+          <Text style={styles.profileEmail}>{authState.email}</Text>
         </View>
       </View>
       <FlatList
@@ -40,6 +41,7 @@ export const DefaultPostsScreen = ({ route, navigation }) => {
         keyExtractor={(_, index) => index.toString()}
         renderItem={({
           item: {
+            id,
             photo,
             namePost,
             location,
@@ -57,16 +59,23 @@ export const DefaultPostsScreen = ({ route, navigation }) => {
               <View style={styles.infoThumb}>
                 <TouchableOpacity
                   style={styles.info}
-                  onPress={() => navigation.navigate('CommentsScreen')}
+                  onPress={() =>
+                    navigation.navigate('CommentsScreen', { postId: id, photo })
+                  }
                 >
-                  <Feather name="message-circle" size={24} color="#BDBDBD" />
+                  <Feather
+                    name="message-circle"
+                    size={24}
+                    color="#BDBDBD"
+                    style={{ transform: [{ rotate: '-90deg' }] }}
+                  />
                   <Text style={styles.textComment}>0</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.info}
                   onPress={() => {
                     navigation.navigate('MapScreen', {
-                      capturedPhoto,
+                      photo,
                       namePost,
                       location,
                     });

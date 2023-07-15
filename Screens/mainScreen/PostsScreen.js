@@ -27,6 +27,7 @@ export const PostsScreen = ({ navigation, setTabBarStyle }) => {
           borderBottomWidth: 1,
           borderColor: '#E5E5E5',
         },
+        cardStyle: { backgroundColor: '#FFFFFF' },
       }}
     >
       <NestedScreen.Screen
