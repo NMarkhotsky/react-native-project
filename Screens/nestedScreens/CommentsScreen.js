@@ -160,7 +160,6 @@ export const CommentsScreen = ({ route, navigation, setTabBarStyle }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'flex-end',
 
     marginTop: 32,
     marginBottom: 16,

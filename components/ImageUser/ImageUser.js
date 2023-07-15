@@ -43,9 +43,9 @@ export const ImageUser = ({ state, onPress, onDelete }) => {
 const styles = StyleSheet.create({
   imagePhotoContainer: {
     position: 'absolute',
-    left: '50%',
-    transform: [{ translateX: -45 }],
     top: -60,
+    left: '50%',
+    transform: [{ translateX: -55 }],
   },
   imagePhoto: {
     width: 120,

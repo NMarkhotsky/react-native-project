@@ -9,7 +9,10 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useAuth } from '../../hooks/useAuth';
-import { getDataFromFirestore } from '../../redux/post/postOperations';
+import {
+  getComments,
+  getDataFromFirestore,
+} from '../../redux/post/postOperations';
 
 export const DefaultPostsScreen = ({ route, navigation }) => {
   const [post, setPost] = useState([]);
@@ -21,7 +24,9 @@ export const DefaultPostsScreen = ({ route, navigation }) => {
       setPost(newData);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return (
@@ -38,7 +43,6 @@ export const DefaultPostsScreen = ({ route, navigation }) => {
       </View>
       <FlatList
         data={post}
-        keyExtractor={(_, index) => index.toString()}
         renderItem={({
           item: {
             id,
@@ -46,6 +50,7 @@ export const DefaultPostsScreen = ({ route, navigation }) => {
             namePost,
             location,
             convertedCoordinate: { region, country },
+            commentsCount,
           },
         }) => {
           return (
@@ -67,9 +72,23 @@ export const DefaultPostsScreen = ({ route, navigation }) => {
                     name="message-circle"
                     size={24}
                     color="#BDBDBD"
-                    style={{ transform: [{ rotate: '-90deg' }] }}
+                    style={[
+                      { transform: [{ rotate: '-90deg' }] },
+                      commentsCount
+                        ? { color: '#FF6C00' }
+                        : { color: '#BDBDBD' },
+                    ]}
                   />
-                  <Text style={styles.textComment}>0</Text>
+                  <Text
+                    style={[
+                      styles.textComment,
+                      commentsCount
+                        ? { color: '#212121' }
+                        : { color: '#BDBDBD' },
+                    ]}
+                  >
+                    {commentsCount}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.info}
@@ -90,6 +109,7 @@ export const DefaultPostsScreen = ({ route, navigation }) => {
             </View>
           );
         }}
+        keyExtractor={(item) => item.id}
       />
     </View>
   );
