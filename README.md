@@ -1,4 +1,14 @@
 # <div align=center>React Native project</div>
+ 
+ <div align=center>Download app⬇️</div>
+
+
+ <div align=center>
+   
+   ![Screenshot_8](https://github.com/NMarkhotsky/react-native-project/assets/111852661/a207ff45-f3b7-48a2-94e4-fdedee61893d) 
+ 
+ </div>
+
 ###
 ![MyCollages](https://github.com/NMarkhotsky/react-native-project/assets/111852661/9a4e4e67-5912-47ee-a198-a2e3212e2499)
 ###
